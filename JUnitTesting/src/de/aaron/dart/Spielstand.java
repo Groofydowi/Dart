@@ -33,9 +33,9 @@ public class Spielstand {
 		 */
 	}
 
-	// public void alleSpielerAusgeben() {
-	// for (Spieler name : punkteStandProSpieler.keySet()) {
-	// System.out.println(name.getName());
-	// }
-	// }
+	public void alleSpielerAusgeben() {
+		for (Spieler name : punkteStandProSpieler.keySet()) {
+			System.out.println(name.getName());
+		}
+	}
 }
