@@ -33,8 +33,9 @@ public class Spielstand {
 		 */
 	}
 
-	public void alleSpielerAusgeben() {
-		for (Spieler name : punkteStandProSpieler.keySet()) {
+	// Ist bereits in SpielerTest vorhanden!!!
+	public void alleSpielerAusgeben(Map<Spieler, Spielstand> supervisor) {
+		for (Spieler name : supervisor.keySet()) {
 			System.out.println(name.getName());
 		}
 	}

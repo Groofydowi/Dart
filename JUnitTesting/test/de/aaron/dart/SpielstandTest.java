@@ -1,17 +1,13 @@
 package de.aaron.dart;
 
-import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
 public class SpielstandTest extends TestCase {
-
-	// public void testGetPunktestandFuer() throws Exception {
-	// Spieler spieler1 = new Spieler("Max");
-	// Spielstand stand = new Spielstand();
-	//
-	// System.out.println(stand.getPunkteStandFuer(spieler1));
-	// }
 
 	public void testPunkteStandEinSpieler() throws Exception {
 		Leg leg1 = new Leg(501);
@@ -23,15 +19,15 @@ public class SpielstandTest extends TestCase {
 		Wurf wurf1 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.ZWANZIG);
 		standSpieler1.spielerHatGeworfen(spieler1, wurf1);
 
-		Wurf wurf2 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.FÜNFZEHN);
+		Wurf wurf2 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.EINS);
 		standSpieler1.spielerHatGeworfen(spieler1, wurf2);
 
 		Wurf wurf3 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
 		standSpieler1.spielerHatGeworfen(spieler1, wurf3);
 
-		System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
-		System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage());
-		System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
+		assertEquals(83, standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
+		assertEquals(27.6666660, standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage(), 0.0000001);
+		assertEquals(418, standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
 	}
 
 	public void testPunkteStandZweiSpieler() throws Exception {
@@ -52,9 +48,9 @@ public class SpielstandTest extends TestCase {
 		Wurf wurf13 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
 		standSpieler1.spielerHatGeworfen(spieler1, wurf13);
 
-		System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
-		System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage());
-		System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
+		assertEquals(125, standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
+		assertEquals(41.666668, standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage(), 0.00001);
+		assertEquals(376, standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
 
 		Wurf wurf21 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
 		standSpieler2.spielerHatGeworfen(spieler2, wurf21);
@@ -65,13 +61,15 @@ public class SpielstandTest extends TestCase {
 		Wurf wurf23 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.FÜNF);
 		standSpieler2.spielerHatGeworfen(spieler2, wurf23);
 
-		System.out.println(standSpieler2.getPunkteStandFuer(spieler2).ermittleGesamtPunktZahl());
-		System.out.println(standSpieler2.getPunkteStandFuer(spieler2).ermittleAverage());
-		System.out.println(standSpieler2.getPunkteStandFuer(spieler2).ermittleVerbleibendePunkte());
+		assertEquals(85, standSpieler2.getPunkteStandFuer(spieler2).ermittleGesamtPunktZahl());
+		assertEquals(416, standSpieler2.getPunkteStandFuer(spieler2).ermittleVerbleibendePunkte());
+		assertEquals(28.333334, standSpieler2.getPunkteStandFuer(spieler2).ermittleAverage(), 0.000001);
 	}
 
 	public void testAlleSpielerAusgeben() throws Exception {
 		Leg leg1 = new Leg(501);
+		Map<Spieler, Spielstand> supervisor = new HashMap<Spieler, Spielstand>();
+		List<String> values = new ArrayList<String>();
 
 		Spieler spieler0 = new Spieler("Supervisor");
 		Spieler spieler1 = new Spieler("Max");
@@ -80,6 +78,14 @@ public class SpielstandTest extends TestCase {
 		Spieler spieler4 = new Spieler("Carmen");
 		Spieler spieler5 = new Spieler("Maja");
 
+		// for (int i = 0; i <= 5; i++) {
+		// values.add("spieler" + i);
+		// }
+		// for (int i = 0; i < values.size(); i++) {
+		// values.get(i);
+		// Spielstand standSpieler0 = new Spielstand(leg1, spieler0);
+		// }
+
 		Spielstand standSpieler0 = new Spielstand(leg1, spieler0);
 		Spielstand standSpieler1 = new Spielstand(leg1, spieler1);
 		Spielstand standSpieler2 = new Spielstand(leg1, spieler2);
@@ -87,8 +93,14 @@ public class SpielstandTest extends TestCase {
 		Spielstand standSpieler4 = new Spielstand(leg1, spieler4);
 		Spielstand standSpieler5 = new Spielstand(leg1, spieler5);
 
-		Spielstand stand;
-		// stand.alleSpielerAusgeben();
+		supervisor.put(spieler1, standSpieler1);
+		supervisor.put(spieler2, standSpieler2);
+		supervisor.put(spieler3, standSpieler3);
+		supervisor.put(spieler4, standSpieler4);
+		supervisor.put(spieler5, standSpieler5);
+
+		standSpieler0.alleSpielerAusgeben(supervisor);
+
 	}
 
 	public void testForLoop() throws Exception {
@@ -103,9 +115,10 @@ public class SpielstandTest extends TestCase {
 																				// Eingaben gibt.
 			standSpieler1.spielerHatGeworfen(spieler1, wurf1);
 		}
-		System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
-		System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage());
-		System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
+
+		assertEquals(180, standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
+		assertEquals(60.0, standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage(), 0.0);
+		assertEquals(321, standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
 	}
 
 	public void testWhileLoop() throws Exception {
@@ -117,7 +130,7 @@ public class SpielstandTest extends TestCase {
 		Spielstand standSpieler1 = new Spielstand(leg1, spieler1);
 		Spielstand standSpieler2 = new Spielstand(leg1, spieler2);
 
-		while (standSpieler1.getPunkteStandFuer(spieler1).getAnzahlWuerfe() <= 3) { //
+		while (standSpieler1.getPunkteStandFuer(spieler1).getAnzahlWuerfe() < 3) { //
 			Wurf wurf1 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.ZWANZIG);
 			standSpieler1.spielerHatGeworfen(spieler1, wurf1);
 
@@ -126,13 +139,12 @@ public class SpielstandTest extends TestCase {
 			//
 			// Wurf wurf3 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
 			// standSpieler1.spielerHatGeworfen(spieler1, wurf3);
-
-			System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
-			System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage());
-			System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
 		}
+		assertEquals(180, standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
+		assertEquals(60.0, standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage(), 0.0);
+		assertEquals(321, standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
 
-		while (standSpieler2.getPunkteStandFuer(spieler2).getAnzahlWuerfe() <= 3) { //
+		while (standSpieler2.getPunkteStandFuer(spieler2).getAnzahlWuerfe() < 3) { //
 			Wurf wurf1 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
 			standSpieler2.spielerHatGeworfen(spieler2, wurf1);
 
@@ -141,11 +153,10 @@ public class SpielstandTest extends TestCase {
 			//
 			// Wurf wurf3 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.EINS);
 			// standSpieler2.spielerHatGeworfen(spieler2, wurf3);
-
-			System.out.println(standSpieler2.getPunkteStandFuer(spieler2).ermittleGesamtPunktZahl());
-			System.out.println(standSpieler2.getPunkteStandFuer(spieler2).ermittleAverage());
-			System.out.println(standSpieler2.getPunkteStandFuer(spieler2).ermittleVerbleibendePunkte());
 		}
+		assertEquals(60, standSpieler2.getPunkteStandFuer(spieler2).ermittleGesamtPunktZahl());
+		assertEquals(20.0, standSpieler2.getPunkteStandFuer(spieler2).ermittleAverage(), 0.0);
+		assertEquals(441, standSpieler2.getPunkteStandFuer(spieler2).ermittleVerbleibendePunkte());
 
 		// while () {
 		// Wurf wurf = new Wurf(btnMod.getText(), btnFeld.getText());
@@ -163,18 +174,15 @@ public class SpielstandTest extends TestCase {
 		Spielstand standSpieler2 = new Spielstand(leg1, spieler2);
 
 		while (standSpieler1.getPunkteStandFuer(spieler1).getAnzahlWuerfe() < 3) {
-			eingabe = JOptionPane.showInputDialog("Geben Sie den Mod an:");
+			// eingabe = JOptionPane.showInputDialog("Geben Sie den Mod an:");
 			Wurf wurf1 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.ZWANZIG);
+			// Wurf wurf2 = new Wurf(eingabe, PunkteFeld.ZWANZIG);
 			standSpieler1.spielerHatGeworfen(spieler1, wurf1);
-
-			System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
-			System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage());
-			System.out.println(standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
 		}
 
-	}
-
-	public void testEingabeFeld() throws Exception {
+		assertEquals(180, standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
+		assertEquals(60.0, standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage(), 0.0);
+		assertEquals(321, standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
 
 	}
 }
