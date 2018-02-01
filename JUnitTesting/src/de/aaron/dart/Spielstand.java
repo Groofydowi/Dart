@@ -13,17 +13,19 @@ public class Spielstand {
 		punkteStandProSpieler = new HashMap<Spieler, SpielerPunkteStand>();
 		this.leg = leg;
 		spielerPunkteStand = new SpielerPunkteStand(leg);
-		punkteStandProSpieler.put(spieler, spielerPunkteStand);
 	}
 
 	public SpielerPunkteStand getPunkteStandFuer(Spieler spieler) {
-
 		return punkteStandProSpieler.get(spieler);
-
 	}
 
 	public void spielerHatGeworfen(Spieler spieler, Wurf wurf) {
-		spielerPunkteStand.spielerHatGeworfen(wurf);
+		if (punkteStandProSpieler.containsKey(spieler)) {
+			spielerPunkteStand.spielerHatGeworfen(wurf);
+		} else {
+			punkteStandProSpieler.put(spieler, spielerPunkteStand);
+			spielerPunkteStand.spielerHatGeworfen(wurf);
+		}
 	}
 
 	// Ist bereits in SpielerTest vorhanden!!!
