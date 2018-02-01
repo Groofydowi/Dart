@@ -1,5 +1,8 @@
 package de.aaron.dart;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,14 +19,16 @@ public class SpielstandTest extends TestCase {
 
 		Spielstand standSpieler1 = new Spielstand(leg1, spieler1);
 
-		Wurf wurf1 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.ZWANZIG);
-		standSpieler1.spielerHatGeworfen(spieler1, wurf1);
+		Wurf wurf = mock(Wurf.class);
+		standSpieler1.spielerHatGeworfen(spieler1, wurf);
 
 		Wurf wurf2 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.EINS);
 		standSpieler1.spielerHatGeworfen(spieler1, wurf2);
 
 		Wurf wurf3 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
 		standSpieler1.spielerHatGeworfen(spieler1, wurf3);
+
+		when(standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl()).thenReturn(83);
 
 		assertEquals(83, standSpieler1.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
 		assertEquals(27.6666660, standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage(), 0.0000001);
@@ -184,5 +189,41 @@ public class SpielstandTest extends TestCase {
 		assertEquals(60.0, standSpieler1.getPunkteStandFuer(spieler1).ermittleAverage(), 0.0);
 		assertEquals(321, standSpieler1.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
 
+	}
+
+	public void testNurEineSpielstandVariable() throws Exception {
+		Leg leg1 = new Leg(501);
+
+		Spieler spieler1 = new Spieler("Max");
+		Spieler spieler2 = new Spieler("Bobbi");
+
+		Spielstand standSpieler = new Spielstand(leg1, spieler1);
+		Spielstand standSpieler2 = new Spielstand(leg1, spieler2);
+
+		Wurf wurf11 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.ZWANZIG);
+		standSpieler.spielerHatGeworfen(spieler1, wurf11);
+
+		Wurf wurf12 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.FÜNFZEHN);
+		standSpieler.spielerHatGeworfen(spieler1, wurf12);
+
+		Wurf wurf13 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
+		standSpieler.spielerHatGeworfen(spieler1, wurf13);
+
+		assertEquals(125, standSpieler.getPunkteStandFuer(spieler1).ermittleGesamtPunktZahl());
+		assertEquals(41.666668, standSpieler.getPunkteStandFuer(spieler1).ermittleAverage(), 0.00001);
+		assertEquals(376, standSpieler.getPunkteStandFuer(spieler1).ermittleVerbleibendePunkte());
+
+		Wurf wurf21 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
+		standSpieler2.spielerHatGeworfen(spieler2, wurf21);
+
+		Wurf wurf22 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.ZWANZIG);
+		standSpieler2.spielerHatGeworfen(spieler2, wurf22);
+
+		Wurf wurf23 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.FÜNF);
+		standSpieler2.spielerHatGeworfen(spieler2, wurf23);
+
+		assertEquals(85, standSpieler2.getPunkteStandFuer(spieler2).ermittleGesamtPunktZahl());
+		assertEquals(416, standSpieler2.getPunkteStandFuer(spieler2).ermittleVerbleibendePunkte());
+		assertEquals(28.333334, standSpieler2.getPunkteStandFuer(spieler2).ermittleAverage(), 0.000001);
 	}
 }

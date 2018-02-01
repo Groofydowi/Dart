@@ -29,12 +29,15 @@ public class Wurf {
 
 	public Wurf(PunkteModifier punkteModifier, PunkteFeld punkteFeld) {
 
-		if (punkteFeld == PunkteFeld.BULL || punkteFeld == PunkteFeld.BULLS_EYE) {
+		if ((punkteModifier == PunkteModifier.DOUBLE || punkteModifier == PunkteModifier.TRIPLE)
+				&& punkteFeld == PunkteFeld.BULLS_EYE) {
+
+			throw new IllegalArgumentException("Es gibt kein 'Double Bullseye' oder 'Triple Bullseye'");
+		} else if (!(punkteModifier == PunkteModifier.DOUBLE && punkteFeld == PunkteFeld.BULL)
+				|| punkteFeld == PunkteFeld.BULL || punkteFeld == PunkteFeld.BULLS_EYE) {
 
 			this.punktZahl = punkteFeld.getPunktZahl();
-
 		} else {
-
 			this.punktZahl = punkteModifier.getModifier() * punkteFeld.getPunktZahl();
 		}
 

@@ -24,13 +24,6 @@ public class Spielstand {
 
 	public void spielerHatGeworfen(Spieler spieler, Wurf wurf) {
 		spielerPunkteStand.spielerHatGeworfen(wurf);
-		/*
-		 * Es gibt keine Punkte Stand für diesen Spieler.
-		 * 
-		 * 1. Warum nicht?
-		 * 
-		 * 2. Was passiert, wenn das wirklich so ist
-		 */
 	}
 
 	// Ist bereits in SpielerTest vorhanden!!!
