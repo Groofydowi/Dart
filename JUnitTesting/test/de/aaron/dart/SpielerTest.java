@@ -31,9 +31,4 @@ public class SpielerTest extends TestCase {
 			System.out.println(spielerender.getName());
 		}
 	}
-
-	public void testSpielerNamenAendern() throws Exception {
-		Spieler spieler1 = new Spieler("Alxe");
-		spieler1.spielerNamenAendern("Alex");
-	}
 }

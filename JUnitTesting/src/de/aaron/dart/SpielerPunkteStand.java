@@ -7,12 +7,14 @@ public class SpielerPunkteStand {
 
 	private List<Wurf> wuerfe = new ArrayList<>();
 	private Leg leg;
-	private int gewonneneLegs;
 
 	public SpielerPunkteStand(Leg leg) {
 		this.leg = leg;
 	}
 
+	/*
+	 * Average
+	 */
 	public float ermittleAverage() {
 		if (wuerfe.isEmpty())
 			return 0.0f;
@@ -29,7 +31,10 @@ public class SpielerPunkteStand {
 		return wuerfe.size();
 	}
 
-	public int ermittleGesamtPunktZahl() { // oder hier die Abfrage ob null Punkte übrig
+	/*
+	 * Gesamt Punktzahl
+	 */
+	public int ermittleGesamtPunktZahl() {
 
 		int punktZahl = 0;
 
@@ -39,7 +44,14 @@ public class SpielerPunkteStand {
 		return punktZahl;
 	}
 
+	/*
+	 * Verbleibende Punkte
+	 */
 	public int ermittleVerbleibendePunkte() { // Abfrage ob gewonnen, überworfen oder weiter
 		return leg.getAnfangspunkte() - ermittleGesamtPunktZahl();
+	}
+
+	public static SpielerPunkteStand create(Leg leg) {
+		return new SpielerPunkteStand(leg);
 	}
 }

@@ -67,11 +67,4 @@ public class SpielerPunkteStandTest extends TestCase {
 
 		assertEquals(50, stand.ermittleGesamtPunktZahl());
 	}
-
-	public void testAufrufAverageWennKeineWuerfe() throws Exception {
-		Leg leg1 = new Leg(501);
-		SpielerPunkteStand stand = new SpielerPunkteStand(leg1);
-
-		assertEquals(0.0f, stand.ermittleAverage());
-	}
 }

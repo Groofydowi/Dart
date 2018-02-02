@@ -18,10 +18,4 @@ public class Spieler {
 
 		this.name = name;
 	}
-
-	public void spielerNamenAendern(String name) {
-		String vorher = this.name;
-		setName(name);
-		System.out.println("Der Spielername wurde von " + vorher + " zu " + this.name + " geändert!");
-	}
 }

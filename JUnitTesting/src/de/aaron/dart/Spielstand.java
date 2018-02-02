@@ -5,27 +5,26 @@ import java.util.Map;
 
 public class Spielstand {
 
-	private Map<Spieler, SpielerPunkteStand> punkteStandProSpieler;
 	private Leg leg;
-	SpielerPunkteStand spielerPunkteStand;
+	private Map<Spieler, SpielerPunkteStand> punkteStandProSpieler;
 
-	public Spielstand(Leg leg, Spieler spieler) {
-		punkteStandProSpieler = new HashMap<Spieler, SpielerPunkteStand>();
+	public Spielstand(Leg leg) {
 		this.leg = leg;
-		spielerPunkteStand = new SpielerPunkteStand(leg);
+		punkteStandProSpieler = new HashMap<Spieler, SpielerPunkteStand>();
 	}
 
-	public SpielerPunkteStand getPunkteStandFuer(Spieler spieler) {
-		return punkteStandProSpieler.get(spieler);
+	public void spielstandAnlegen(Spieler spieler) {
+
+		SpielerPunkteStand spielerPunkteStand = SpielerPunkteStand.create(leg);
+
+		this.punkteStandProSpieler.put(spieler, spielerPunkteStand);
 	}
 
 	public void spielerHatGeworfen(Spieler spieler, Wurf wurf) {
-		if (punkteStandProSpieler.containsKey(spieler)) {
-			spielerPunkteStand.spielerHatGeworfen(wurf);
-		} else {
-			punkteStandProSpieler.put(spieler, spielerPunkteStand);
-			spielerPunkteStand.spielerHatGeworfen(wurf);
-		}
+
+		SpielerPunkteStand spielerPunkteStand = getPunkteStandFuerNotNull(spieler);
+
+		spielerPunkteStand.spielerHatGeworfen(wurf);
 	}
 
 	// Ist bereits in SpielerTest vorhanden!!!
@@ -33,5 +32,24 @@ public class Spielstand {
 		for (Spieler name : supervisor.keySet()) {
 			System.out.println(name.getName());
 		}
+	}
+
+	public float getAverageFuerSpieler(Spieler spieler) {
+
+		SpielerPunkteStand spielerPunkteStand = getPunkteStandFuerNotNull(spieler);
+
+		return spielerPunkteStand.ermittleAverage();
+	}
+
+	private SpielerPunkteStand getPunkteStandFuerNotNull(Spieler spieler) {
+
+		SpielerPunkteStand spielerPunkteStand = punkteStandProSpieler.get(spieler);
+
+		if (spielerPunkteStand == null)
+			throw new IllegalStateException(String.format(
+					"Es wurde noch kein Spielstand für Spieler 's' angelegt. spielstandAnlegen(spieler) kann helfen",
+					spieler));
+
+		return spielerPunkteStand;
 	}
 }
