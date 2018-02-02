@@ -6,10 +6,8 @@ import java.util.List;
 public class SpielerPunkteStand {
 
 	private List<Wurf> wuerfe = new ArrayList<>();
-	private Leg leg;
 
-	public SpielerPunkteStand(Leg leg) {
-		this.leg = leg;
+	public SpielerPunkteStand() {
 	}
 
 	/*
@@ -47,11 +45,9 @@ public class SpielerPunkteStand {
 	/*
 	 * Verbleibende Punkte
 	 */
-	public int ermittleVerbleibendePunkte() { // Abfrage ob gewonnen, überworfen oder weiter
-		return leg.getAnfangspunkte() - ermittleGesamtPunktZahl();
-	}
+
 
 	public static SpielerPunkteStand create(Leg leg) {
-		return new SpielerPunkteStand(leg);
+		return new SpielerPunkteStand();
 	}
 }

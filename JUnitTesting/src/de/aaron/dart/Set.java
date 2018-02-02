@@ -1,6 +1,6 @@
 package de.aaron.dart;
 
-public class Break { // Spieler muss 3 legs gewinnen, also höchsten fünf Legs
+public class Set { // Spieler muss 3 legs gewinnen, also höchsten fünf Legs
 
 	// public void SpielStart() {
 	// Leg leg1 = new Leg(501);

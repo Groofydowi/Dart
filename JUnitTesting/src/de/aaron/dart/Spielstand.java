@@ -13,10 +13,7 @@ public class Spielstand {
 		punkteStandProSpieler = new HashMap<Spieler, SpielerPunkteStand>();
 	}
 
-	public void spielstandAnlegen(Spieler spieler) {
-
-		SpielerPunkteStand spielerPunkteStand = SpielerPunkteStand.create(leg);
-
+	public void spielstandAnlegen(Spieler spieler, SpielerPunkteStand spielerPunkteStand) {
 		this.punkteStandProSpieler.put(spieler, spielerPunkteStand);
 	}
 
@@ -28,10 +25,42 @@ public class Spielstand {
 	}
 
 	// Ist bereits in SpielerTest vorhanden!!!
-	public void alleSpielerAusgeben(Map<Spieler, Spielstand> supervisor) {
-		for (Spieler name : supervisor.keySet()) {
-			System.out.println(name.getName());
+	public String alleSpielerAusgeben() {
+
+		// List<Spieler> list = new ArrayList<Spieler>(punkteStandProSpieler.keySet());
+		//
+		// list.sort(Spieler::compareToIgnoreCase);
+
+		// Collections.sort(list, new Comparator<Spieler>() {
+		// public int compare(Spieler s1, Spieler s2) {
+		// return s1.
+		// }
+		// });
+
+		String names = "";
+
+		for (Spieler name : punkteStandProSpieler.keySet()) {
+			names = names + name.getName() + "\n";
 		}
+
+		return names;
+	}
+
+	/*
+	 * Verbleibende Punkte
+	 */
+	// public int ermittleVerbleibendePunkte() { // Abfrage ob gewonnen, überworfen
+	// oder weiter
+	// return leg.getAnfangspunkte() - ermittleGesamtPunktZahl();
+	// }
+
+	public int getRestPunktZahlFuer(Spieler spieler) {
+
+		int legPunktZahl = leg.getAnfangspunkte();
+
+		SpielerPunkteStand spielerPunkteStand = getPunkteStandFuerNotNull(spieler);
+
+		return legPunktZahl - spielerPunkteStand.ermittleGesamtPunktZahl();
 	}
 
 	public float getAverageFuerSpieler(Spieler spieler) {
@@ -39,6 +68,13 @@ public class Spielstand {
 		SpielerPunkteStand spielerPunkteStand = getPunkteStandFuerNotNull(spieler);
 
 		return spielerPunkteStand.ermittleAverage();
+	}
+
+	public int getGesamtPunktZahl(Spieler spieler) {
+
+		SpielerPunkteStand spielerPunkteStand = getPunkteStandFuerNotNull(spieler);
+
+		return spielerPunkteStand.ermittleGesamtPunktZahl();
 	}
 
 	private SpielerPunkteStand getPunkteStandFuerNotNull(Spieler spieler) {

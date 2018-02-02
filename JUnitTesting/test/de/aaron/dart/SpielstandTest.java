@@ -1,8 +1,49 @@
 package de.aaron.dart;
 
+import org.mockito.Mockito;
+
 import junit.framework.TestCase;
 
 public class SpielstandTest extends TestCase {
+
+	public void testVerbleibendePunktZahl() throws Exception {
+
+		Leg leg = Mockito.mock(Leg.class);
+
+		Spielstand spielstand = new Spielstand(leg);
+
+		Spieler spieler = Mockito.mock(Spieler.class);
+
+		SpielerPunkteStand spielerPunkteStand = Mockito.mock(SpielerPunkteStand.class);
+
+		spielstand.spielstandAnlegen(spieler, spielerPunkteStand);
+
+		Mockito.when(leg.getAnfangspunkte()).thenReturn(501);
+
+		int restPunktZahlFuer = spielstand.getRestPunktZahlFuer(spieler);
+
+		assertEquals(501, restPunktZahlFuer);
+	}
+
+	public void testVerleibendePunktZahlZWei() throws Exception {
+
+		Leg leg = Mockito.mock(Leg.class);
+
+		Spielstand spielstand = new Spielstand(leg);
+
+		Spieler spieler = Mockito.mock(Spieler.class);
+
+		SpielerPunkteStand spielerPunkteStand = Mockito.mock(SpielerPunkteStand.class);
+
+		spielstand.spielstandAnlegen(spieler, spielerPunkteStand);
+
+		Mockito.when(leg.getAnfangspunkte()).thenReturn(501);
+		Mockito.when(spielerPunkteStand.ermittleGesamtPunktZahl()).thenReturn(101);
+
+		int restPunktZahlFuer = spielstand.getRestPunktZahlFuer(spieler);
+
+		assertEquals(400, restPunktZahlFuer);
+	}
 
 	public void testPunkteStandAverage() throws Exception {
 
@@ -12,7 +53,9 @@ public class SpielstandTest extends TestCase {
 
 		Spieler spieler1 = new Spieler("Max");
 
-		spielstand.spielstandAnlegen(spieler1);
+		SpielerPunkteStand spielerPunkteStand = Mockito.mock(SpielerPunkteStand.class);
+
+		spielstand.spielstandAnlegen(spieler1, spielerPunkteStand);
 
 		Wurf wurf1 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.ZWANZIG);
 		spielstand.spielerHatGeworfen(spieler1, wurf1);
@@ -22,6 +65,8 @@ public class SpielstandTest extends TestCase {
 
 		Wurf wurf3 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
 		spielstand.spielerHatGeworfen(spieler1, wurf3);
+
+		Mockito.when(spielerPunkteStand.ermittleAverage()).thenReturn(27.66666660f);
 
 		assertEquals(27.6666660, spielstand.getAverageFuerSpieler(spieler1), 0.00001);
 	}
@@ -34,7 +79,9 @@ public class SpielstandTest extends TestCase {
 
 		Spieler spieler1 = new Spieler("Max");
 
-		spielstand.spielstandAnlegen(spieler1);
+		SpielerPunkteStand spielerPunkteStand = Mockito.mock(SpielerPunkteStand.class);
+
+		spielstand.spielstandAnlegen(spieler1, spielerPunkteStand);
 
 		Wurf wurf1 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.ZWANZIG);
 		spielstand.spielerHatGeworfen(spieler1, wurf1);
@@ -45,26 +92,62 @@ public class SpielstandTest extends TestCase {
 		Wurf wurf3 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
 		spielstand.spielerHatGeworfen(spieler1, wurf3);
 
+		Mockito.when(spielerPunkteStand.ermittleGesamtPunktZahl()).thenReturn(83);
+
+		assertEquals(83, spielstand.getGesamtPunktZahl(spieler1));
 	}
 
-	public void testNeuerSpielerPunkteStand() throws Exception {
-		// Leg leg1 = new Leg(501);
-		//
-		// Spieler spieler1 = new Spieler("Max");
-		//
-		// Spielstand spielstand = new Spielstand(spieler1);
-		// spielstand.neuerSpielerPunkteStand(leg1, spieler1);
-		//
-		// Wurf wurf1 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.ZWANZIG);
-		// spielstand.spielerHatGeworfen(spieler1, wurf1);
-		//
-		// Wurf wurf2 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.EINS);
-		// spielstand.spielerHatGeworfen(spieler1, wurf2);
-		//
-		// Wurf wurf3 = new Wurf(PunkteModifier.SINGLE, PunkteFeld.ZWANZIG);
-		// spielstand.spielerHatGeworfen(spieler1, wurf3);
-		//
-		// System.out.println(spielstand.getAverageFuerSpieler(spieler1));
+	public void testNeuerSpielerNull() throws Exception {
+		Leg leg1 = new Leg(501);
+
+		Spielstand spielstand = new Spielstand(leg1);
+
+		Spieler spieler1 = new Spieler("Max");
+
+		Wurf wurf1 = new Wurf(PunkteModifier.TRIPLE, PunkteFeld.ZWANZIG);
+
+		try {
+			spielstand.spielerHatGeworfen(spieler1, wurf1);
+			fail("Bei 'spielerHatGeworfen' ohne initialisierung eines Spielstandes hätte eine Exception fliegen müssen!");
+		} catch (Exception e) {
+
+			assertNotNull("Die Exception hätte hier nicht 'null' sein dürfen", e);
+		}
+
+	}
+
+	public void testEinSpielerAusgeben() throws Exception {
+		Leg leg1 = new Leg(501);
+
+		Spieler spieler1 = new Spieler("Max");
+
+		SpielerPunkteStand spielerPunkteStand = Mockito.mock(SpielerPunkteStand.class);
+
+		Spielstand spielstand = new Spielstand(leg1);
+		spielstand.spielstandAnlegen(spieler1, spielerPunkteStand);
+
+		String names = spielstand.alleSpielerAusgeben();
+		String max = "Max" + "\n";
+
+		assertEquals(max, names);
+	}
+
+	public void testZweiSpielerAusgeben() throws Exception {
+		Leg leg1 = new Leg(501);
+
+		Spieler spieler1 = new Spieler("Max");
+		Spieler spieler2 = new Spieler("Joan");
+
+		SpielerPunkteStand spielerPunkteStand = Mockito.mock(SpielerPunkteStand.class);
+
+		Spielstand spielstand = new Spielstand(leg1);
+		spielstand.spielstandAnlegen(spieler1, spielerPunkteStand);
+		spielstand.spielstandAnlegen(spieler2, spielerPunkteStand);
+
+		String names = spielstand.alleSpielerAusgeben();
+		String max = "Joan" + "\n" + "Max" + "\n";
+
+		assertEquals(max, names);
 	}
 
 	// public void testPunkteStandZweiSpieler() throws Exception {
